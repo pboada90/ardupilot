@@ -176,7 +176,19 @@ void AP_Motors6DOF::setup_motors(motor_frame_class frame_class, motor_frame_type
         break;
 
     case SUB_FRAME_CUSTOM:
-        // Put your custom motor setup here
+        _frame_class_string = "AIAPAEC";
+        // Motor #,                             Roll_F Pitch_F  Yaw_F   Heave_F Fwd_F   Lat_F   Testing Order
+
+        add_motor_raw_6dof(AP_MOTORS_MOT_1,     -1.0f,  0,      1.0f,   0,      1.0f,   0,      1); 
+
+        add_motor_raw_6dof(AP_MOTORS_MOT_2,     1.0f,   0,      -1.0f,  0,      1.0f,   0,      2); 
+
+        add_motor_raw_6dof(AP_MOTORS_MOT_3,     0,      1.0f,   0,      1.0f,   0,      0,      3); // Yaw reaction still not defined
+
+        add_motor_raw_6dof(AP_MOTORS_MOT_4,     0,      -1.0f,  0,      1.0f,   0,      0,      4); // Yaw reaction still not defined
+
+        add_motor_raw_6dof(AP_MOTORS_MOT_5,     0,      0,      1.0f,   0,      0,      1.0f,   5); // Pitch reaction still not defined
+        // Force must point to positive Y axis
         //break;
 
     case SUB_FRAME_SIMPLEROV_3:
@@ -232,9 +244,7 @@ void AP_Motors6DOF::output_min()
 
 int16_t AP_Motors6DOF::calc_thrust_to_pwm(float thrust_in) const
 {
-    int16_t range_up = get_pwm_output_max() - 1500;
-    int16_t range_down = 1500 - get_pwm_output_min();
-    return 1500 + thrust_in * (thrust_in > 0 ? range_up : range_down);
+    return constrain_int16(1500 + thrust_in * 400, get_pwm_output_min(), get_pwm_output_max());
 }
 
 void AP_Motors6DOF::output_to_motors()
