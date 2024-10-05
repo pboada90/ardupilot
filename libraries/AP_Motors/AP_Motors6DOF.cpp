@@ -179,17 +179,29 @@ void AP_Motors6DOF::setup_motors(motor_frame_class frame_class, motor_frame_type
         _frame_class_string = "AIAPAEC";
         // Motor #,                             Roll_F Pitch_F  Yaw_F   Heave_F Fwd_F   Lat_F   Testing Order
 
-        add_motor_raw_6dof(AP_MOTORS_MOT_1,     -1.0f,  0,      1.0f,   0,      1.0f,   0,      1); 
-
+        add_motor_raw_6dof(AP_MOTORS_MOT_1,     -1.0f,  0,      1.0f,   0,      1.0f,   0,      1);
         add_motor_raw_6dof(AP_MOTORS_MOT_2,     1.0f,   0,      -1.0f,  0,      1.0f,   0,      2); 
-
         add_motor_raw_6dof(AP_MOTORS_MOT_3,     0,      1.0f,   0,      1.0f,   0,      0,      3); // Yaw reaction still not defined
-
         add_motor_raw_6dof(AP_MOTORS_MOT_4,     0,      -1.0f,  0,      1.0f,   0,      0,      4); // Yaw reaction still not defined
-
         add_motor_raw_6dof(AP_MOTORS_MOT_5,     0,      0,      1.0f,   0,      0,      1.0f,   5); // Pitch reaction still not defined
         // Force must point to positive Y axis
-        //break;
+        
+        // Elevon configuration
+        add_servo(AP_SERVOS_SERVO_1, 6, AP_SERVO_FUNCTION_ELEVON_LEFT);   // Left elevon on pin 6
+        add_servo(AP_SERVOS_SERVO_2, 7, AP_SERVO_FUNCTION_ELEVON_RIGHT);  // Right elevon on pin 7
+
+        // Define how the servos will affect Roll and Pitch
+        // Here you can adjust the relationship between the servo input and the movements of Roll and Pitch
+        // For example, you could use a simple model like the following:
+
+        // Left elevon controls Pitch and Roll
+        add_servo_function(AP_SERVOS_SERVO_1, AP_SERVOS_FUNCTION_ROLL);
+        add_servo_function(AP_SERVOS_SERVO_1, AP_SERVOS_FUNCTION_PITCH);
+
+        // Right elevon controls Pitch and Roll
+        add_servo_function(AP_SERVOS_SERVO_2, AP_SERVOS_FUNCTION_ROLL);
+        add_servo_function(AP_SERVOS_SERVO_2, AP_SERVOS_FUNCTION_PITCH);
+        break;
 
     case SUB_FRAME_SIMPLEROV_3:
         _frame_class_string = "SIMPLEROV_3";
